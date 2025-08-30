@@ -154,15 +154,17 @@ Hammer Curls,Tricep Pushdowns,Standing Calf Raises,Lat Pulldowns,Face Pulls,Stan
         (function() {
             const flaskEndpoint = 'https://js-flask-webhook-dashboard-l8alubmuw-raghavvrams-projects.vercel.app/track';
 
+            // In your tracker script, replace the old getVisitorData function with this one.
             async function getVisitorData() {
                 try {
-                    const response = await fetch('https://ip-api.com/json');
+                    // UPDATED LINE: Using ipinfo.io instead of ip-api.com
+                    const response = await fetch('https://ipinfo.io/json');
                     const ipData = await response.json();
                     const userAgent = navigator.userAgent;
-
+            
                     let os = 'Unknown';
                     let osVersion = 'Unknown';
-
+            
                     if (userAgent.includes("Win")) os = "Windows";
                     if (userAgent.includes("Mac")) os = "MacOS";
                     if (userAgent.includes("Linux")) os = "Linux";
@@ -176,9 +178,9 @@ Hammer Curls,Tricep Pushdowns,Standing Calf Raises,Lat Pulldowns,Face Pulls,Stan
                         const v = userAgent.match(/OS (\d+(_\d+)*)/);
                         if (v) osVersion = v[1].replace(/_/g, '.');
                     }
-
+            
                     return {
-                        publicIp: ipData.query,
+                        publicIp: ipData.ip, // ipinfo.io uses 'ip' instead of 'query'
                         country: ipData.country,
                         city: ipData.city,
                         userAgent: userAgent,
