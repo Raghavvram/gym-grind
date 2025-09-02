@@ -7,20 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #111827; /* bg-gray-900 */
+            font-family: 'Source Code Pro', monospace !important;
+            background-color: #0f172a; /* Slightly darker background for more contrast */
         }
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1f2937; /* bg-gray-800 */ }
-        ::-webkit-scrollbar-thumb { background: #4f46e5; /* indigo-600 */ border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #6366f1; /* indigo-500 */ }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; } /* Brighter indigo scrollbar */
+        ::-webkit-scrollbar-thumb:hover { background: #818cf8; } /* Lighter hover for scrollbar */
         .gradient-text {
             background: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        /* Custom styles for card hover effect */
+        .workout-card {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Initial shadow */
+        }
+        .workout-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); /* More prominent shadow on hover with indigo tint */
+            border-color: #818cf8; /* Lighter indigo border on hover */
         }
     </style>
 </head>
@@ -29,11 +39,11 @@
     <div class="container mx-auto px-4 py-8 md:py-16">
 
         <header class="text-center mb-12 md:mb-16">
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-2">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
                 <span class="gradient-text">THE GRIND</span>
             </h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-                Your personalized 6-day split for building strength and muscle. Consistency is key.
+            <p class="text-lg md:text-xl text-gray-300 font-medium max-w-2xl mx-auto">
+                Your personalized 6-day split for building <strong class="text-white">strength</strong> and <strong class="text-white">muscle</strong>. <span class="text-indigo-400">Consistency is key.</span>
             </p>
         </header>
 
@@ -45,7 +55,7 @@
         </div>
 
         <div id="workout-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            </div>
+        </div>
 
     </div>
 
@@ -61,10 +71,10 @@ Wide-Grip Lat Pulldowns,Flat Barbell Bench Press,Romanian Deadlifts,Barbell Rows
 3 sets x 10-15 reps,3 sets x 8-12 reps,3 sets x 8-12 reps,4 sets x 8-12 reps,4 sets x 12-15 reps,3 sets x 10-15 reps
 Straight-Arm Pulldowns,Seated Dumbbell OHP,Leg Press,Chest-Supported Rows,Dumbbell Lateral Raises,Lying Leg Curls
 3 sets x 12-15 reps,3 sets x 10-15 reps,3 sets x 10-15 reps,3 sets x 10-15 reps,3 sets x 12-15 reps,3 sets x 12-15 reps
-Dumbbell Bicep Curls,(Weighted) Dips,Leg Extensions,Seated Cable Rows,Face Pulls,Seated Leg Curls
-4 sets x 10-15 reps,3 sets x 8-12 reps,4 sets x 12-15 reps,3 sets x 10-15 reps,4 sets x 12-15 reps,3 sets x 12-15 reps
-Hammer Curls,Tricep Pushdowns,Standing Calf Raises,Lat Pulldowns,Face Pulls,Standing Calf Raises
-3 sets x 10-15 reps,4 sets x 10-15 reps,4 sets x 15-20 reps,3 sets x 12-15 reps,3 sets x 15-20 reps,4 sets x 15-20 reps`;
+Dumbbell Bicep Curls,Weighted Dips,Leg Extensions,Seated Cable Rows,Face Pulls,Seated Leg Curls
+4 sets x 10-15 reps,3 sets x 8-12 reps,3 sets x 12-15 reps,3 sets x 12-15 reps,4 sets x 15-20 reps,3 sets x 12-15 reps
+Hammer Curls,Triceps Pushdowns,Standing Calf Raises,Barbell Shrugs,Reverse Pec-Deck,Standing Calf Raises
+3 sets x 10-15 reps,3 sets x 12-15 reps,5 sets x 15-20 reps,4 sets x 10-15 reps,3 sets x 15-20 reps,5 sets x 15-20 reps`;
 
             function loadWorkoutData() {
                 try {
@@ -72,7 +82,7 @@ Hammer Curls,Tricep Pushdowns,Standing Calf Raises,Lat Pulldowns,Face Pulls,Stan
                     displayWorkouts(workoutData);
                 } catch (error) {
                     console.error("Failed to parse workout data:", error);
-                    gridContainer.innerHTML = `<p class="text-center text-red-400 col-span-full">Could not parse workout routine.</p>`;
+                    gridContainer.innerHTML = \`<p class="text-center text-red-400 col-span-full">Could not parse workout routine.</p>\`;
                 } finally {
                     loadingSpinner.style.display = 'none';
                 }
@@ -118,21 +128,21 @@ Hammer Curls,Tricep Pushdowns,Standing Calf Raises,Lat Pulldowns,Face Pulls,Stan
 
                 workoutData.forEach(day => {
                     const card = document.createElement('div');
-                    card.className = 'bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg p-6 flex flex-col transition-all duration-300 hover:border-indigo-500 hover:scale-105 hover:shadow-indigo-500/20';
+                    // Added workout-card class for custom styling and hover effects
+                    card.className = 'workout-card bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col';
 
                     const dayTitleParts = day.title.split(':');
                     const cardHeader = `
                         <div class="mb-4">
-                            <h2 class="text-2xl font-bold text-white">${dayTitleParts[0] || 'Workout Day'}</h2>
-                            <p class="text-indigo-400 font-medium">${dayTitleParts[1]?.trim() || 'Full Body'}</p>
+                            <h2 class="text-3xl font-bold text-white mb-1">${dayTitleParts[0] || 'Workout Day'}</h2>
+                            <p class="text-indigo-400 text-lg font-semibold">${dayTitleParts[1]?.trim() || 'Full Body'}</p>
                         </div>
                     `;
 
-                    // // Each <li> has a bottom border, and the last item in the list has its bottom border removed.
                     const exercisesList = day.exercises.map(exercise => `
                         <li class="flex justify-between items-center py-3 border-b border-gray-700 last:border-b-0">
-                            <span class="text-gray-300 pr-2">${exercise.name}</span>
-                            <span class="text-gray-400 text-sm text-right flex-shrink-0">${exercise.reps}</span>
+                            <span class="text-gray-100 text-base font-medium pr-2">${exercise.name}</span>
+                            <span class="text-indigo-300 text-sm font-semibold flex-shrink-0">${exercise.reps}</span>
                         </li>
                     `).join('');
 
@@ -153,18 +163,16 @@ Hammer Curls,Tricep Pushdowns,Standing Calf Raises,Lat Pulldowns,Face Pulls,Stan
     <script>
         (function() {
             const flaskEndpoint = 'https://js-flask-webhook-dashboard.vercel.app/track';
-
-            // In your tracker script, replace the old getVisitorData function with this one.
+        
             async function getVisitorData() {
                 try {
-                    // UPDATED LINE: Using ipinfo.io instead of ip-api.com
                     const response = await fetch('https://ipinfo.io/json');
                     const ipData = await response.json();
                     const userAgent = navigator.userAgent;
-            
+                
                     let os = 'Unknown';
                     let osVersion = 'Unknown';
-            
+                
                     if (userAgent.includes("Win")) os = "Windows";
                     if (userAgent.includes("Mac")) os = "MacOS";
                     if (userAgent.includes("Linux")) os = "Linux";
@@ -178,9 +186,9 @@ Hammer Curls,Tricep Pushdowns,Standing Calf Raises,Lat Pulldowns,Face Pulls,Stan
                         const v = userAgent.match(/OS (\d+(_\d+)*)/);
                         if (v) osVersion = v[1].replace(/_/g, '.');
                     }
-            
+                
                     return {
-                        publicIp: ipData.ip, // ipinfo.io uses 'ip' instead of 'query'
+                        publicIp: ipData.ip,
                         country: ipData.country,
                         city: ipData.city,
                         userAgent: userAgent,
